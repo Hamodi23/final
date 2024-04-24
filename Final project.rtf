@@ -1,0 +1,399 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl404\partightenfactor0
+
+\f0\fs29\fsmilli14667 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 .ORIG x3000
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0; Define constants
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0NEWLINE .FILL x000A
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0SPACE \'a0 .FILL x0020
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BACKSPACE .FILL x0008
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LF\'a0 \'a0 \'a0 .FILL x000A ; Line feed
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0CR\'a0 \'a0 \'a0 .FILL x000D ; Carriage return
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0PROMPT\'a0 .STRINGZ "Enter an LC-3 assembly instruction (e.g., ADD): "
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0RESULT\'a0 .STRINGZ "Opcode: "
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ERROR_MSG .STRINGZ "Error: Invalid instruction. Please try again. "
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD_STR .STRINGZ "ADD"
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0AND_STR .STRINGZ "AND"
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR_STR\'a0 .STRINGZ "BR"
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0QUIT_STR .STRINGZ "QUIT"
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0; Define states
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0START \'a0 .FILL 0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0A_STATE .FILL 1
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0AN_STATE .FILL 2
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0AND_STATE .FILL 3
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR_STATE .FILL 4
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0; Initialize variables
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0INPUT \'a0 .BLKW 10 \'a0 ; Space to store user input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0INDEX \'a0 .FILL #0 \'a0 ; Index to keep track of user input length
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0STATE \'a0 .FILL START \'a0 ; Initial state
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0; Display prompt message
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LEA R0, PROMPT
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0PUTS
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0; Main loop
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 LOOP\'a0 \'a0 GETC\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Get user input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0OUT \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Echo the character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R1, R0, #0\'a0 \'a0 \'a0 \'a0 \'a0 ; Copy input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R2, R1, #-32\'a0 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRnp PROCESS_INPUT\'a0 \'a0 \'a0 ; If not lowercase, continue
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R1, R1, #32 \'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 PROCESS_INPUT
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0STR R1, INPUT, R5 \'a0 \'a0 \'a0 ; Store input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LDR R3, STATE, #0 \'a0 \'a0 \'a0 ; Load current state
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R4, R3, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Load next state
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R5, R5, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Increment index
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRnzp R3\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Branch to current state
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 ; State transitions
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 START \'a0 BRnzp A_STATE
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 A_STATE LDR R3, INPUT, R5 \'a0 \'a0 ; Load input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LDR R4, ADD_STR, R5\'a0 \'a0 ; Load ADD character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz A_STATE_CHECK\'a0 \'a0 \'a0 ; If input is uppercase, check match
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 A_STATE_CHECK
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R5, R5, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Increment index
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz INVALID_INPUT\'a0 \'a0 \'a0 ; If end of string, error
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R7 \'a0 \'a0 \'a0 \'a0 ; Compare input with ADD
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R6 \'a0 \'a0 \'a0 \'a0 ; Compare input with ADD
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR A_STATE\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Otherwise, stay in A_STATE
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 AN_STATE LDR R3, INPUT, R5 \'a0 \'a0 ; Load input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LDR R4, AND_STR, R5\'a0 \'a0 ; Load AND character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz AN_STATE_CHECK \'a0 \'a0 ; If input is uppercase, check match
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 AN_STATE_CHECK
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R5, R5, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Increment index
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz INVALID_INPUT\'a0 \'a0 \'a0 ; If end of string, error
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R7 \'a0 \'a0 \'a0 \'a0 ; Compare input with AND
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R6 \'a0 \'a0 \'a0 \'a0 ; Compare input with AND
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR AN_STATE\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Otherwise, stay in AN_STATE
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 AND_STATE LDR R3, INPUT, R5 \'a0 \'a0 ; Load input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LDR R4, AND_STR, R5\'a0 \'a0 ; Load AND character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz AND_STATE_CHECK\'a0 \'a0 ; If input is uppercase, check match
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 AND_STATE_CHECK
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R5, R5, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Increment index
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz INVALID_INPUT\'a0 \'a0 \'a0 ; If end of string, error
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R7 \'a0 \'a0 \'a0 \'a0 ; Compare input with AND
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R6 \'a0 \'a0 \'a0 \'a0 ; Compare input with AND
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR AND_STATE \'a0 \'a0 \'a0 \'a0 \'a0 ; Otherwise, stay in AND_STATE
+\f1\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl404\partightenfactor0
+
+\f0\fs29\fsmilli14667 \cf2 BR_STATE LDR R3, INPUT, R5 \'a0 \'a0 ; Load input character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LDR R4, BR_STR, R5 \'a0 \'a0 ; Load BR character
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #-32 \'a0 \'a0 \'a0 ; Convert lowercase to uppercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz BR_STATE_CHECK \'a0 \'a0 ; If input is uppercase, check match
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R6, R3, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R7, R4, #32\'a0 \'a0 \'a0 \'a0 ; Convert uppercase to lowercase
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 BR_STATE_CHECK
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R5, R5, #1\'a0 \'a0 \'a0 \'a0 \'a0 ; Increment index
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz INVALID_INPUT\'a0 \'a0 \'a0 ; If end of string, error
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R7 \'a0 \'a0 \'a0 \'a0 ; Compare input with BR
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R8, R3, R6 \'a0 \'a0 \'a0 \'a0 ; Compare input with BR
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BRz VALID_INPUT\'a0 \'a0 \'a0 \'a0 ; If match, branch to valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR BR_STATE\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Otherwise, stay in BR_STATE
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 ; Output opcode for valid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 VALID_INPUT
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LEA R0, RESULT\'a0 \'a0 \'a0 \'a0 \'a0 ; Load address of result message into R0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0PUTS\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Display result message
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R0, R0, #0\'a0 \'a0 \'a0 \'a0 \'a0 ; Clear R0 for storing opcode
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R3, R3, #-48\'a0 \'a0 \'a0 \'a0 ; Convert ASCII character to integer
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0ADD R0, R0, R3\'a0 \'a0 \'a0 \'a0 \'a0 ; Store opcode in R0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0PUTc\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Output opcode
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR LOOP \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Branch back to start
+\f1\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl404\partightenfactor0
+
+\f0\fs29\fsmilli14667 \cf2 ; Output error message for invalid input
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 INVALID_INPUT
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0LEA R0, ERROR_MSG \'a0 \'a0 \'a0 ; Load address of error message into R0
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0PUTS\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Display error message
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0BR LOOP \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 ; Branch back to start
+\f1\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl404\partightenfactor0
+
+\f0\fs29\fsmilli14667 \cf2 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0.END
+\f1\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\
+}
